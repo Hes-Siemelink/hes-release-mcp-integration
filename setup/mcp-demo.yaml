@@ -40,8 +40,6 @@ spec:
         tasks:
           - name: Get current Agility user
             type: mcp.CallTool
-            capabilities:
-              - remote
             server: Agility MCP Server
             tool: get_current_user
           - name: OK?
@@ -54,10 +52,22 @@ spec:
         tasks:
           - name: Get releases
             type: mcp.CallTool
-            capabilities:
-              - remote
             server: Release MCP Server
             tool: list_tickets
+          - name: OK?
+            type: xlrelease.GateTask
+            owner: admin
+
+  - template: List tools
+    phases:
+      - phase: List tools
+        tasks:
+          - name: List Ticket tools
+            type: mcp.ListTools
+            server: Ticket MCP Server
+          - name: List Agility Tools
+            type: mcp.ListTools
+            server: Agility MCP Server
           - name: OK?
             type: xlrelease.GateTask
             owner: admin

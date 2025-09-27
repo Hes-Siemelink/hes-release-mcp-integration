@@ -2,7 +2,7 @@ from digitalai.release.integration import BaseTask
 
 import asyncio
 from fastmcp import Client
-from fastmcp.client import StreamableHttpTransport, SSETransport
+from fastmcp.client import StreamableHttpTransport, SSETransport, ClientTransport
 from fastmcp.client.client import CallToolResult
 import json
 from mcp.types import TextContent
@@ -15,7 +15,6 @@ class CallTool(BaseTask):
         server = self.input_properties['server']
         if server is None:
             raise ValueError("Server field cannot be empty")
-        server_url = server['url'].strip("/")
         tool = self.input_properties['tool']
         tool_input = self.input_properties['input']
         if not tool_input:
@@ -23,16 +22,7 @@ class CallTool(BaseTask):
         else:
             tool_input = json.loads(tool_input)
 
-        if server['transport'] == 'sse':
-            transport = SSETransport(
-                url=server_url,
-            )
-        else:
-            transport = StreamableHttpTransport(
-                url=server_url,
-            )
-        transport.url = server_url
-        transport.headers = server['headers'] if 'headers' in server else {}
+        transport = create_transport(server)
 
         # Make request
         client = Client(transport)
@@ -42,6 +32,21 @@ class CallTool(BaseTask):
 
         # Process result
         self.set_output_property('result', result)
+
+
+def create_transport(server) -> ClientTransport:
+    server_url = server['url'].strip("/")
+    if server['transport'] == 'sse':
+        transport = SSETransport(
+            url=server_url,
+        )
+    else:
+        transport = StreamableHttpTransport(
+            url=server_url,
+        )
+    transport.url = server_url
+    transport.headers = server['headers'] if 'headers' in server else {}
+    return transport
 
 
 # Async method to call tool

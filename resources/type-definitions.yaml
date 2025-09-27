@@ -22,10 +22,9 @@ types:
       iconLocation: mcp.png
       taskColor: "#667385"
 
-  # Example task that interacts with a third-party server
   mcp.CallTool:
     extends: mcp.BaseTask
-    description: Simple API task
+    description: Calls an MCP tool
 
     input-properties:
       server:
@@ -43,6 +42,26 @@ types:
     output-properties:
       result:
         kind: string
+
+  mcp.ListTools:
+    extends: mcp.BaseTask
+    description: Lists available tools on the MCP server
+
+    input-properties:
+      server:
+        kind: ci
+        referenced-type: mcp.Server
+
+    output-properties:
+      tools:
+        label: Tool definitions
+        description: The available tools on the MCP server and their descriptions
+        kind: map_string_string
+
+      inputSchema:
+        label: Input schema
+        description: The input schema for each tool
+        kind: map_string_string
 
 
   # Example server definition

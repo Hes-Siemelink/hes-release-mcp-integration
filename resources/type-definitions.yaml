@@ -11,7 +11,7 @@ types:
 
   # All tasks in this project extend the BaseTask.
   # Defines the container image location and color/icon for all tasks
-  containerExamples.BaseTask:
+  mcp.BaseTask:
     extends: xlrelease.ContainerTask
     virtual: true
 
@@ -19,90 +19,52 @@ types:
       image:
         default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
         transient: true
-      iconLocation: test.png
+      iconLocation: mcp.png
       taskColor: "#667385"
 
-  # All scripts in this project extend the BaseScript.
-  containerExamples.BaseScript:
-    extends: xlrelease.RemoteScriptExecution
-    virtual: true
-
-    hidden-properties:
-      image:
-        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
-        transient: true
-
-    output-properties:
-      commandResponse:
-        kind: map_string_string
-
-  # Simple example task.
-  # The Python SDK will look for a corresponding Python class called 'Hello'
-  containerExamples.Hello:
-    extends: containerExamples.BaseTask
-    description: "Simple greeter task"
-
-    input-properties:
-      yourName:
-        description: The name to greet
-        kind: string
-        default: World
-
-    output-properties:
-      greeting:
-        kind: string
-
-
-  # Example task that interacts with the Release API
-  containerExamples.SetSystemMessage:
-    extends: containerExamples.BaseTask
-    description: Simple API task
-
-    input-properties:
-      message:
-        description: This message will appear as a banner in the Release UI. Admin access required.
-        kind: string
-
-
-  # Example task that interacts with a third-aprty server
-  containerExamples.ServerQuery:
-    extends: containerExamples.BaseTask
+  # Example task that interacts with a third-party server
+  mcp.CallTool:
+    extends: mcp.BaseTask
     description: Simple API task
 
     input-properties:
       server:
         kind: ci
-        referenced-type: containerExamples.Server
-      productId:
+        referenced-type: mcp.Server
+      tool:
+        description: The name of the tool to call
         kind: string
-        default: 123
+      input:
+        description: The input as a JSON string.
+        kind: string
+        size: large
+        required: false
 
     output-properties:
-      productName:
-        kind: string
-      productBrand:
+      result:
         kind: string
 
 
   # Example server definition
-  containerExamples.Server:
+  mcp.Server:
     extends: configuration.BasicAuthHttpConnection
 
     properties:
       # Overrides 'url' property to give it a default value and a new description
       url:
-        default: https://dummyjson.com
-        description: A Dummy JSON server
+        description: The target MCP Server URL
         required: true
+      transport:
+        label: Transport Protocol
+        description: The transport protocol to use
+        kind: enum
+        default: http
+        enum-values:
+          - http
+          - sse
+      headers:
+        description: Additional HTTP headers to include in requests
+        kind: map_string_string
+        required: false
 
-    hidden-properties:
-      testConnectionScript: containerExamples.TestConnection
 
-  # Example test connection script
-  containerExamples.TestConnection:
-    extends: containerExamples.BaseScript
-
-    input-properties:
-      server:
-        kind: ci
-        referenced-type: containerExamples.Server

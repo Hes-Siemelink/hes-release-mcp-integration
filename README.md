@@ -1,12 +1,4 @@
-# _Template Project for Digital.ai Release Integrations_
-
-_This project serves as a template for developing a Python-based container plugin._
-
-_See [How to create a new project](#how-to-create-a-new-project) below_
-
----
-
-# Digital.ai Release integration to TARGET by PUBLISHER
+# MCP Client tasks for Digital.ai Release 
 
 ⮕ Insert description here
 

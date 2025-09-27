@@ -1,0 +1,63 @@
+---
+apiVersion: xl-release/v1
+kind: Templates
+metadata:
+  home: MCP Demo
+spec:
+
+  # MCP Servers
+  - name: Ticket MCP Server
+    type: mcp.Server
+    url: http://host.docker.internal:8080
+    transport: sse
+
+  - name: Agility MCP Server
+    type: mcp.Server
+    url: https://api.staging.digital.ai/agilitymcp/v1/mcp
+    headers:
+      X-Agility-Bearer: <your-api-key>
+      X-Agility-Host: https://www7.v1host.com/V1Production
+
+  - name: Release MCP Server
+    type: mcp.Server
+    url: http://host.docker.internal
+
+  # Demo Templates
+  - template: MCP Ticket Sample
+    phases:
+      - phase: List tickets
+        tasks:
+          - name: Get tickets
+            type: mcp.CallTool
+            server: Ticket MCP Server
+            tool: list_tickets
+          - name: OK?
+            type: xlrelease.GateTask
+
+  - template: MCP Agility Sample
+    phases:
+      - phase: MCP
+        tasks:
+          - name: Get current Agility user
+            type: mcp.CallTool
+            capabilities:
+              - remote
+            server: Agility MCP Server
+            tool: get_current_user
+          - name: OK?
+            type: xlrelease.GateTask
+            owner: admin
+
+  - template: MCP Release Sample
+    phases:
+      - phase: List releases
+        tasks:
+          - name: Get releases
+            type: mcp.CallTool
+            capabilities:
+              - remote
+            server: Release MCP Server
+            tool: list_tickets
+          - name: OK?
+            type: xlrelease.GateTask
+            owner: admin

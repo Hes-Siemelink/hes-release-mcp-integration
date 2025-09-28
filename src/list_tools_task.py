@@ -21,6 +21,10 @@ class ListTools(BaseTask):
         client = Client(transport)
         output = asyncio.run(list_tools(client))
 
+        # Show Markdown summary in the comments
+        report = create_tool_report(output)
+        self.add_comment(report)
+
         # Process result
         self.set_output_property('tools', extract_tools(output))
         self.set_output_property('inputSchema', extract_input_schema(output))
@@ -43,3 +47,22 @@ def extract_input_schema(result: Tool):
 
 def convert_dict_to_pretty_json(input_dict):
     return json.dumps(input_dict, indent=2)
+
+
+def create_tool_report(output):
+    # Build a Markdown text
+    # Header: ## Available Tools
+    # Then for each tool:
+    # ### Tool Name
+    # Tool Description
+    # #### Input schema
+    # Json formatted input schema (as code block)
+    report = "## Available Tools\n\n"
+    for tool in output:
+        report += f"### {tool.name}\n"
+        report += f"{tool.description}\n\n"
+        report += f"#### Input schema\n"
+        report += "```json\n"
+        report += convert_dict_to_pretty_json(tool.inputSchema)
+        report += "\n```\n\n"
+    return report

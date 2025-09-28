@@ -20,7 +20,7 @@ spec:
 
   - name: Release MCP Server
     type: mcp.Server
-    url: http://host.docker.internal
+    url: http://host.docker.internal:8000/mcp
 
   # Demo Templates
   - template: MCP Ticket Sample
@@ -31,6 +31,12 @@ spec:
             type: mcp.CallTool
             server: Ticket MCP Server
             tool: list_tickets
+          - name: Get single ticket
+            type: mcp.CallTool
+            server: Ticket MCP Server
+            tool: get_ticket
+            input: |
+              {"id": "TICKET-001"}
           - name: OK?
             type: xlrelease.GateTask
 
@@ -38,6 +44,9 @@ spec:
     phases:
       - phase: MCP
         tasks:
+          - name: List tools
+            type: mcp.ListTools
+            server: Agility MCP Server
           - name: Get current Agility user
             type: mcp.CallTool
             server: Agility MCP Server
@@ -50,10 +59,17 @@ spec:
     phases:
       - phase: List releases
         tasks:
+          - name: List tools
+            type: mcp.ListTools
+            server: Release MCP Server
           - name: Get releases
             type: mcp.CallTool
             server: Release MCP Server
-            tool: list_tickets
+            tool: list_releases
+            input: |
+              {
+                "request": {}
+              }
           - name: OK?
             type: xlrelease.GateTask
             owner: admin
@@ -65,6 +81,9 @@ spec:
           - name: List Ticket tools
             type: mcp.ListTools
             server: Ticket MCP Server
+          - name: List tools
+            type: mcp.ListTools
+            server: Release MCP Server
           - name: List Agility Tools
             type: mcp.ListTools
             server: Agility MCP Server

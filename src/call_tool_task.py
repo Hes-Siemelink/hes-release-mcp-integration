@@ -20,7 +20,12 @@ class CallTool(BaseTask):
         if not tool_input:
             tool_input = {}
         else:
-            tool_input = json.loads(tool_input)
+            try:
+                tool_input = json.loads(tool_input)
+            except json.JSONDecodeError:
+                raise ValueError("Invalid JSON for input")
+
+        # print("Tool Input:\n", tool_input)
 
         transport = create_transport(server)
 

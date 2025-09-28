@@ -22,14 +22,17 @@ types:
       iconLocation: mcp.png
       taskColor: "#667385"
 
+    input-properties:
+      server:
+        description: The MCP server
+        kind: ci
+        referenced-type: mcp.Server
+
   mcp.CallTool:
     extends: mcp.BaseTask
     description: Calls an MCP tool
 
     input-properties:
-      server:
-        kind: ci
-        referenced-type: mcp.Server
       tool:
         description: The name of the tool to call
         kind: string
@@ -46,11 +49,6 @@ types:
   mcp.ListTools:
     extends: mcp.BaseTask
     description: Lists available tools on the MCP server
-
-    input-properties:
-      server:
-        kind: ci
-        referenced-type: mcp.Server
 
     output-properties:
       tools:

@@ -99,15 +99,24 @@ types:
         transient: true
       iconLocation: gemini.png
       taskColor: "#667385"
+      server:
+        description: The MCP server
+        kind: ci
+        referenced-type: mcp.Server
 
     input-properties:
       apiKey:
         description: Your Google Gemini API key
         kind: string
         password: true
+      model:
+        description: The Gemini model to use
+        kind: string
+        default: gemini-2.5-flash
       prompt:
         description: The prompt to send to Google Gemini
         kind: string
+        size: large
 
     output-properties:
       response:

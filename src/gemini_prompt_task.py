@@ -9,6 +9,8 @@ class GeminiPrompt(BaseTask):
         # Process input
         api_key = self.input_properties['apiKey']
         prompt = self.input_properties['prompt']
+        model = self.input_properties['model']
+
         if not prompt:
             raise ValueError("Prompt is required")
 
@@ -16,7 +18,7 @@ class GeminiPrompt(BaseTask):
         client = genai.Client(api_key=api_key)
 
         response = client.models.generate_content(
-            model='gemini-2.0-flash-001', contents='Why is the sky blue?'
+            model=model, contents=prompt
         )
         self.add_comment(response.text)
 

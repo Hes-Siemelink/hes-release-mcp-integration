@@ -90,3 +90,71 @@ spec:
           - name: OK?
             type: xlrelease.GateTask
             owner: admin
+
+  # Gemini prompt example
+
+  - template: Gemini prompt
+    phases:
+      - phase: Prompt
+        tasks:
+          - name: Ask something
+            type: mcp.GeminiPrompt
+            #            apiKey: !value "mcp_GeminiPrompt_Ask_something_apiKey"
+            prompt: How is the weather?
+
+  # Full example
+  - template: Agility summarize user
+    phases:
+      - phase: User details
+        tasks:
+          - name: Get current Agility user
+            type: mcp.CallTool
+            variableMapping:
+              result: "${user}"
+            server: Agility MCP Server
+            tool: get_current_user
+          - name: Get name
+            type: mcp.GeminiPrompt
+            variableMapping:
+              response: "${name}"
+            #        apiKey: !value "mcp_GeminiPrompt_Get_name_apiKey"
+            prompt: |-
+              Extract the name from the following data. Give me only the full name as a result
+              
+              ```
+              ${user}
+              ```
+          - name: Summarize
+            type: mcp.GeminiPrompt
+            variableMapping:
+              response: "${summary}"
+            #        apiKey: !value "mcp_GeminiPrompt_Summarize_apiKey"
+            prompt: |-
+              Please create a nice summary of the following data
+              
+              ```
+              ${user}
+              ```
+          - name: Send email
+            type: xlrelease.NotificationTask
+            subject: "User summary for ${name}"
+            body: "${summary}"
+    variables:
+      - type: xlrelease.StringVariable
+        key: user
+        requiresValue: false
+        showOnReleaseStart: false
+        label: User info
+        description: JSON info of user
+      - type: xlrelease.StringVariable
+        key: summary
+        requiresValue: false
+        showOnReleaseStart: false
+        label: User summary
+        description: The response from Google Gemini
+      - type: xlrelease.StringVariable
+        key: name
+        requiresValue: false
+        showOnReleaseStart: false
+        label: User name
+        description: Subject of the message.

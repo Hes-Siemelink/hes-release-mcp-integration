@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 class TestGeminiPrompt(unittest.TestCase):
 
-    def test_call_tool(self):
+    def test_prompt(self):
         # Given
         # Get GEMINI_API_KEY from environment variable or .env file
         load_dotenv()
@@ -16,7 +16,8 @@ class TestGeminiPrompt(unittest.TestCase):
         task = GeminiPrompt()
         task.input_properties = {
             'apiKey': api_key,
-            'prompt': 'What is the weather like today?'
+            'prompt': 'What is the weather in Hilversum like today?',
+            'model': 'gemini-2.5-flash'
         }
 
         # When

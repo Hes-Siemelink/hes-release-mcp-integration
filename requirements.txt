@@ -1,3 +1,4 @@
 digitalai-release-sdk==25.1.1
 # The 'requests' library is already included by digitalai-release-sdk; no additional entry is required.
 fastmcp==2.12.4
+google-genai==1.39.1

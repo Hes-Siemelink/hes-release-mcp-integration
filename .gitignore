@@ -12,6 +12,7 @@ package-lock.json
 src/__pycache__/
 tests/__pycache__/
 venv
+.env
 
 # IntelliJ
 .shelf/

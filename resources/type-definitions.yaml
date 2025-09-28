@@ -10,7 +10,6 @@
 types:
 
   # All tasks in this project extend the BaseTask.
-  # Defines the container image location and color/icon for all tasks
   mcp.BaseTask:
     extends: xlrelease.ContainerTask
     virtual: true
@@ -84,4 +83,33 @@ types:
         kind: map_string_string
         required: false
 
+  #
+  # Google Gemini
+  #
+  # FIXME: Move to separate project
+  #
 
+  mcp.GeminiPrompt:
+    extends: mcp.BaseTask
+    description: Sends a prompt to Google Gemini and returns the response
+
+    hidden-properties:
+      image:
+        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
+        transient: true
+      iconLocation: gemini.png
+      taskColor: "#667385"
+
+    input-properties:
+      apiKey:
+        description: Your Google Gemini API key
+        kind: string
+        password: true
+      prompt:
+        description: The prompt to send to Google Gemini
+        kind: string
+
+    output-properties:
+      response:
+        description: The response from Google Gemini
+        kind: string

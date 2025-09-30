@@ -18,8 +18,12 @@ types:
       image:
         default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
         transient: true
+      # This strong, vibrant blue conveys trust, stability, and intelligence. It's a classic "tech"
+      # color that users associate with core system functions, control, and reliability.
+      # This shade provides a clear contrast to the softer purple, helping users instantly
+      # differentiate between the creative LLM and the core MCP system.
       iconLocation: mcp.png
-      taskColor: "#667385"
+      taskColor: "#5F5FFF"
 
     input-properties:
       server:
@@ -35,6 +39,9 @@ types:
       tool:
         description: The name of the tool to call
         kind: string
+        input-hint:
+          method-ref: tool-lookup
+
       input:
         description: The input as a JSON string.
         kind: string
@@ -44,6 +51,12 @@ types:
     output-properties:
       result:
         kind: string
+
+    methods:
+      tool-lookup:
+        delegate: remoteScriptLookup
+        script: mcp.ToolLookupScript
+        containerConnection: server
 
   mcp.ListTools:
     extends: mcp.BaseTask
@@ -60,13 +73,47 @@ types:
         description: The input schema for each tool
         kind: map_string_string
 
+  # Scripts
+  mcp.BaseScript:
+    extends: xlrelease.RemoteScriptExecution
+    virtual: true
 
-  # Example server definition
+    hidden-properties:
+      image:
+        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
+        transient: true
+
+    output-properties:
+      commandResponse:
+        kind: map_string_string
+
+  mcp.TestConnection:
+    extends: mcp.BaseScript
+
+    input-properties:
+      server:
+        kind: ci
+        referenced-type: mcp.Server
+
+  mcp.ToolLookupScript:
+    extends: mcp.BaseScript
+
+    input-properties:
+      _ci:
+        kind: ci
+        referenced-type: mcp.BaseTask
+      _attributes:
+        kind: map_string_string
+      _parameters:
+        kind: ci
+        referenced-type: udm.Parameters
+
+
+  # MCP Server
   mcp.Server:
-    extends: configuration.BasicAuthHttpConnection
+    extends: configuration.ContainerHttpConnection
 
     properties:
-      # Overrides 'url' property to give it a default value and a new description
       url:
         description: The target MCP Server URL
         required: true
@@ -83,6 +130,9 @@ types:
         kind: map_string_string
         required: false
 
+    hidden-properties:
+      testConnectionScript: mcp.TestConnection
+
   #
   # Google Gemini
   #
@@ -98,7 +148,13 @@ types:
         default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
         transient: true
       iconLocation: gemini.png
-      taskColor: "#667385"
+      # This vibrant, medium-light purple with pink undertones aligns perfectly with the
+      # current design trend for AI. It feels creative, intelligent, and approachable.
+      # The color is energetic without being overwhelming, making it suitable for
+      # representing the dynamic and generative nature of a large language model like
+      # Gemini. It's a very popular hue in the AI space, evoking a sense of magic and
+      # possibility.
+      taskColor: "#C88BFF"
       server:
         description: The MCP server
         kind: ci

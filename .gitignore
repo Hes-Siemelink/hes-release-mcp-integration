@@ -1,5 +1,8 @@
 syntax: glob
 
+# Passwords and keys
+secrets.xlvals
+
 # Build
 build
 .build-cache/

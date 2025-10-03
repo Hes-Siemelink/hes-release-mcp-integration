@@ -1,140 +1,65 @@
-# MCP Client tasks for Digital.ai Release 
+# MCP Client tasks for Digital.ai Release
 
-⮕ Insert description here
+AI demo tasks for Release
 
----
-## How to build and run
+* MCP: List tools
+* MCP: Call tools
+* Gemini prompt
 
-This section describes the quickest way to get a setup with Release to test containerized plugins using the SDK Development environment. For a production setup, please refer to the documentation. <!-- XXX insert link to documentation -->
+## Prerequisites
 
-### Prerequisites
-
-You need to have the following installed in order to develop Python-based container tasks for Release using this project:
+You need to have the following installed in order to develop Python-based container tasks for Release using this
+project:
 
 * Python 3
-* Git
 * Docker
 
-### Start Release
+## Quickstart
 
-We will run Release within a local Docker environment. In the development setup, the Release server will manage containerized tasks in Docker.
+### 1. Configure your `hosts` file
 
-Start the Release environment with the following command
+Add the following to `/etc/hosts` or `C:\Windows\System32\drivers\etc\hosts` (sudo / administrator permissions
+required):
+
+    127.0.0.1 container-registry
+
+### 2. Start the Release environment:
 
 ```commandline
 cd dev-environment
 docker compose up -d --build
 ```
 
-### Configure your `hosts` file
-
-The Release server needs to be able to find the container images of the integration you are creating. In order to do so the development setup has its own registry running inside Docker. Add the address of the registry to your local machine's `hosts` file.
-
-**Unix / macOS**
-
-Add the following entry to `/etc/hosts` (sudo privileges is required to edit):
-
-    127.0.0.1 container-registry
-
-**Windows**
-
-Add the following entry to `C:\Windows\System32\drivers\etc\hosts` (Run as administrator permission is required to edit):
-
-    127.0.0.1 container-registry
-
-
-### Build & publish the plugin
+### 3. Build & publish the plugin
 
 Run the build script
 
 **Unix / macOS**
 
 ```commandline
-sh build.sh 
+sh build.sh --upload
 ```
 
 **Windows**
 
 ```commandline
-build.bat 
+build.bat --upload
 ```
 
-The above command builds the zip, creates the container image, and then pushes the image to the configured registry.
+### 4. Upload demo templates
 
-`build.bat --zip` Builds the zip.
-
-`build.bat --image` Creates the container image, and then pushes the image to the configured registry.
-
-### Install plugin into Release
-
-There are two ways to install the plugin into Release.
-
-**Install plugin via commandline**
-
-Update the Release server details in `release-integration-template-python/.xebialabs/config.yaml`
-
-Run the command for Unix / macOS:
-```commandline
-sh build.sh --upload 
-```
-
-Run the command for Windows:
-```commandline
-build.bat --upload 
-```
-The above command builds the zip, creates the container image, pushes the image to the configured registry, and uploads the zip to the release server.
-
-**Install plugin via Release server UI**
-
-In the Release UI, use the Plugin Manager interface to upload the zip from `build`.
-The zip takes the name of the project, for example `release-integration-template-python-1.0.0.zip`.
-
-Then:
-* Refresh the UI by pressing Reload in the browser.
-
-### 5. Test it!
-
-Create a template with the task **Container Example: Hello** and run it!
-
-### 6. Clean up
-
-Stop the development environment with the following command:
-
-    docker compose down
-
----
-
-## How to create a new project
-
-The  [release-integration-template-python](https://github.com/digital-ai/release-integration-template-python) repository is a template project.
-
-On the main page of this repository, click **Use this template** button, and select **Create new repository**. This will create a duplicate of this project to start developing your own container-based integration. 
-
-**Naming conventions**
-
-Use the following naming convention for developing Digital.ai Release integration plugins:
-
-    [publisher]-release-[target]-integration
-
-Where publisher would be the name of your company.
-
-For example:
-
-    acme-release-example-integration
-
-### Repository configuration
-
-In the new project, update `project.properties` with the name of the integration plugin
+Run the following command to upload the demo templates to the local Release instance:
 
 ```commandline
-cd acme-release-example-integration
+./xlw apply -f setup/mcp-demo.yaml
 ```
 
-Change the following line in `project.properties`:
+### Browse the templates
 
-```
-PLUGIN=acme-release-example-integration
-...
-```
+1. Log in to http://localhost:5516 with admin/admin
+2. Go to the **MCP Demo** folder
+3. Go the **Templates** section and look at the examples
+
+Now add your favorite MCP Server under Connections and build your own template using the MCP plugin!
 
 

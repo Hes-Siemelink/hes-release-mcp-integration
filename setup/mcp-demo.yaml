@@ -15,7 +15,7 @@ spec:
     type: mcp.Server
     url: https://api.staging.digital.ai/agilitymcp/v1/mcp
     headers:
-      X-Agility-Bearer: <your-api-key>
+      X-Agility-Bearer: !value AGILITY_KEY
       X-Agility-Host: https://www7.v1host.com/V1Production
 
   - name: Release MCP Server
@@ -44,7 +44,7 @@ spec:
     phases:
       - phase: MCP
         tasks:
-          - name: List tools
+          - name: List Agility tools
             type: mcp.ListTools
             server: Agility MCP Server
           - name: Get current Agility user
@@ -59,7 +59,7 @@ spec:
     phases:
       - phase: List releases
         tasks:
-          - name: List tools
+          - name: List Release tools
             type: mcp.ListTools
             server: Release MCP Server
           - name: Get releases
@@ -81,7 +81,7 @@ spec:
           - name: List Ticket tools
             type: mcp.ListTools
             server: Ticket MCP Server
-          - name: List tools
+          - name: List Release tools
             type: mcp.ListTools
             server: Release MCP Server
           - name: List Agility Tools
@@ -99,7 +99,7 @@ spec:
         tasks:
           - name: Ask something
             type: mcp.GeminiPrompt
-            #            apiKey: !value "mcp_GeminiPrompt_Ask_something_apiKey"
+            apiKey: !value GEMINI_API_KEY
             prompt: How is the weather?
 
   # Full example
@@ -117,28 +117,27 @@ spec:
             type: mcp.GeminiPrompt
             variableMapping:
               response: "${name}"
-            #        apiKey: !value "mcp_GeminiPrompt_Get_name_apiKey"
+            apiKey: !value GEMINI_API_KEY
             prompt: |-
               Extract the name from the following data. Give me only the full name as a result
               
               ```
               ${user}
               ```
-          - name: Summarize
+          - name: Get summary
             type: mcp.GeminiPrompt
             variableMapping:
               response: "${summary}"
-            #        apiKey: !value "mcp_GeminiPrompt_Summarize_apiKey"
+            apiKey: !value GEMINI_API_KEY
             prompt: |-
               Please create a nice summary of the following data
               
               ```
               ${user}
               ```
-          - name: Send email
-            type: xlrelease.NotificationTask
-            subject: "User summary for ${name}"
-            body: "${summary}"
+          - name: Summary for ${name}
+            type: xlrelease.Task
+            description: ${summary}
     variables:
       - type: xlrelease.StringVariable
         key: user

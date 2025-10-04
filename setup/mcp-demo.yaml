@@ -178,13 +178,14 @@ spec:
 
   - template: Langchain demo
     phases:
-      - phase: Ask
+      - phase: Report
         tasks:
-          - name: Ask about Release
+          - name: Latest failed release
             type: mcp.AgentPrompt
-            prompt: Say hello in Dutch
-            model: Gemini 2.5 Flash-Lite
+            server: Release MCP Server
+            prompt: What is the latest failed release?
+            model: Gemini 2.5 Flash
+            mcpServer1: Release MCP Server
           - name: OK?
             type: xlrelease.GateTask
             owner: admin
-

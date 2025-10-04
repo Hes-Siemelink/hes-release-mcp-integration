@@ -1,6 +1,6 @@
 import unittest
 
-from src.list_tools_task import ListTools
+from src.ListTools import ListTools
 
 
 class TestListTools(unittest.TestCase):

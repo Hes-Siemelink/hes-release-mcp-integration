@@ -22,6 +22,22 @@ spec:
     type: mcp.Server
     url: http://host.docker.internal:8000/mcp
 
+    # Gemini Models
+  - name: Gemini 2.5 Pro
+    type: mcp.GeminiModel
+    apiKey: !value GEMINI_API_KEY
+    model: gemini-2.5-pro
+
+  - name: Gemini 2.5 Flash
+    type: mcp.GeminiModel
+    apiKey: !value GEMINI_API_KEY
+    model: gemini-2.5-flash
+
+  - name: Gemini 2.5 Flash-Lite
+    type: mcp.GeminiModel
+    apiKey: !value GEMINI_API_KEY
+    model: gemini-2.5-flash-lite
+
   # Demo Templates
   - template: MCP Ticket Sample
     phases:
@@ -91,21 +107,6 @@ spec:
             type: xlrelease.GateTask
             owner: admin
 
-  - template: Langchain demo
-    phases:
-      - phase: Ask
-        tasks:
-          - name: Ask about Release
-            type: mcp.AgentPrompt
-            capabilities:
-              - remote
-            prompt: Say hello in Dutch
-            apiKey: !value GEMINI_API_KEY
-            mcpServer1: Release MCP Server
-          - name: OK?
-            type: xlrelease.GateTask
-            owner: admin
-
   # Gemini prompt example
 
   - template: Gemini prompt
@@ -114,8 +115,8 @@ spec:
         tasks:
           - name: Ask something
             type: mcp.GeminiPrompt
-            apiKey: !value GEMINI_API_KEY
-            prompt: How is the weather?
+            model: Gemini 2.5 Flash-Lite
+            prompt: Say hello in five languages
 
   # Full example
   - template: Agility summarize user
@@ -132,7 +133,7 @@ spec:
             type: mcp.GeminiPrompt
             variableMapping:
               response: "${name}"
-            apiKey: !value GEMINI_API_KEY
+            model: Gemini 2.5 Flash
             prompt: |-
               Extract the name from the following data. Give me only the full name as a result
               
@@ -143,7 +144,7 @@ spec:
             type: mcp.GeminiPrompt
             variableMapping:
               response: "${summary}"
-            apiKey: !value GEMINI_API_KEY
+            model: Gemini 2.5 Flash
             prompt: |-
               Please create a nice summary of the following data
               
@@ -172,3 +173,18 @@ spec:
         showOnReleaseStart: false
         label: User name
         description: Subject of the message.
+
+  # Langchain example
+
+  - template: Langchain demo
+    phases:
+      - phase: Ask
+        tasks:
+          - name: Ask about Release
+            type: mcp.AgentPrompt
+            prompt: Say hello in Dutch
+            model: Gemini 2.5 Flash-Lite
+          - name: OK?
+            type: xlrelease.GateTask
+            owner: admin
+

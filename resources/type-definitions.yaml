@@ -9,7 +9,37 @@
 
 types:
 
-  # All tasks in this project extend the BaseTask.
+  #
+  # MCP
+  #
+
+  # MCP Server
+
+  mcp.Server:
+    extends: configuration.ContainerHttpConnection
+
+    properties:
+      url:
+        description: The target MCP Server URL
+        required: true
+      transport:
+        label: Transport Protocol
+        description: The transport protocol to use
+        kind: enum
+        default: http
+        enum-values:
+          - http
+          - sse
+      headers:
+        description: Additional HTTP headers to include in requests
+        kind: map_string_string
+        required: false
+
+    hidden-properties:
+      testConnectionScript: mcp.TestConnection
+
+  # MCP tasks
+
   mcp.BaseTask:
     extends: xlrelease.ContainerTask
     virtual: true
@@ -73,7 +103,8 @@ types:
         description: The input schema for each tool
         kind: map_string_string
 
-  # Scripts
+  # MCP Scripts
+
   mcp.BaseScript:
     extends: xlrelease.RemoteScriptExecution
     virtual: true
@@ -108,38 +139,11 @@ types:
         kind: ci
         referenced-type: udm.Parameters
 
-
-  # MCP Server
-  mcp.Server:
-    extends: configuration.ContainerHttpConnection
-
-    properties:
-      url:
-        description: The target MCP Server URL
-        required: true
-      transport:
-        label: Transport Protocol
-        description: The transport protocol to use
-        kind: enum
-        default: http
-        enum-values:
-          - http
-          - sse
-      headers:
-        description: Additional HTTP headers to include in requests
-        kind: map_string_string
-        required: false
-
-    hidden-properties:
-      testConnectionScript: mcp.TestConnection
-
   #
   # Google Gemini
   #
-  # FIXME: Move to separate project
-  #
 
-  mcp.GeminiKey:
+  mcp.GeminiModel:
     extends: xlrelease.Configuration
 
     properties:
@@ -148,6 +152,10 @@ types:
         description: API Key for Google Gemini
         required: true
         password: true
+      model:
+        description: The model to use
+        kind: string
+        default: gemini-2.5-flash
 
   mcp.GeminiPrompt:
     extends: mcp.BaseTask
@@ -158,12 +166,6 @@ types:
         default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
         transient: true
       iconLocation: gemini.png
-      # This vibrant, medium-light purple with pink undertones aligns perfectly with the
-      # current design trend for AI. It feels creative, intelligent, and approachable.
-      # The color is energetic without being overwhelming, making it suitable for
-      # representing the dynamic and generative nature of a large language model like
-      # Gemini. It's a very popular hue in the AI space, evoking a sense of magic and
-      # possibility.
       taskColor: "#C88BFF"
       server:
         description: The MCP server
@@ -171,14 +173,10 @@ types:
         referenced-type: mcp.Server
 
     input-properties:
-      apiKey:
-        description: Your Google Gemini API key
-        kind: string
-        password: true
       model:
-        description: The Gemini model to use
-        kind: string
-        default: gemini-2.5-flash
+        description: The LLM model to use
+        kind: ci
+        referenced-type: mcp.GeminiModel
       prompt:
         description: The prompt to send to Google Gemini
         kind: string
@@ -190,7 +188,7 @@ types:
         kind: string
 
   #
-  # Langchain Agent
+  # Langchain
   #
 
   mcp.AgentPrompt:
@@ -203,14 +201,9 @@ types:
         kind: string
         required: true
       model:
-        description: The Gemini model to use
-        kind: string
-        default: gemini-2.5-flash
-      apiKey:
-        label: Gemini API Key
-        description: API Key for Google Gemini
-        required: true
-        password: true
+        description: The LLM model to use
+        kind: ci
+        referenced-type: mcp.GeminiModel
       mcpServer1:
         label: MCP Server 1
         description: An MCP server that can be used by the agent

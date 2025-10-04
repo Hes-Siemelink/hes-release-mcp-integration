@@ -1,6 +1,6 @@
 import unittest
 
-from src.call_tool_task import CallTool
+from src.CallTool import CallTool
 
 
 class TestCallTool(unittest.TestCase):

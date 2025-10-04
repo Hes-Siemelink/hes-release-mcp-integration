@@ -1,6 +1,6 @@
 import unittest
 
-from src.gemini_prompt_task import GeminiPrompt
+from src.GeminiPrompt import GeminiPrompt
 import os
 from dotenv import load_dotenv
 
@@ -15,9 +15,11 @@ class TestGeminiPrompt(unittest.TestCase):
 
         task = GeminiPrompt()
         task.input_properties = {
-            'apiKey': api_key,
-            'prompt': 'What is the weather in Hilversum like today?',
-            'model': 'gemini-2.5-flash-lite'
+            'prompt': 'Say hello in Spanish',
+            'model': {
+                'apiKey': api_key,
+                'model': 'gemini-2.5-flash-lite'
+            },
         }
 
         # When
@@ -27,7 +29,7 @@ class TestGeminiPrompt(unittest.TestCase):
         print(result)
 
         # Then
-        self.assertIsNotNone(result)
+        self.assertIn('Hola', result)
 
 
 if __name__ == '__main__':

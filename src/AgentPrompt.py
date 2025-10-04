@@ -14,8 +14,8 @@ class AgentPrompt(BaseTask):
     def execute(self) -> None:
         # Get input
         prompt = self.input_properties.get('prompt')
-        model = self.input_properties.get('model')
-        os.environ["GOOGLE_API_KEY"] = self.input_properties.get('apiKey', '')
+        model = self.input_properties['model']
+        os.environ["GOOGLE_API_KEY"] = model['apiKey']
         mcp_servers = {}
         for server in [self.input_properties.get('mcpServer1'), self.input_properties.get('mcpServer2'),
                        self.input_properties.get('mcpServer3')]:
@@ -30,7 +30,7 @@ class AgentPrompt(BaseTask):
                 }
 
         # Call agent
-        output = asyncio.run(send_prompt(prompt, model, mcp_servers))
+        output = asyncio.run(send_prompt(prompt, model['model'], mcp_servers))
         print("AgentPrompt Result:\n", output)
         result = first_agent_message(output)
 

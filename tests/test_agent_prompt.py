@@ -16,8 +16,10 @@ class TestAgentPrompt(unittest.TestCase):
         task = AgentPrompt()
         task.input_properties = {
             'prompt': 'Say hello in Spanish',
-            'model': 'gemini-2.5-flash-lite',
-            'apiKey': api_key,
+            'model': {
+                'apiKey': api_key,
+                'model': 'gemini-2.5-flash-lite'
+            },
         }
 
         # When
@@ -26,8 +28,4 @@ class TestAgentPrompt(unittest.TestCase):
         print(result)
 
         # Then
-        self.assertIn(result, 'Hola')
-
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertIn('Hola', result)

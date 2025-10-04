@@ -139,6 +139,16 @@ types:
   # FIXME: Move to separate project
   #
 
+  mcp.GeminiKey:
+    extends: xlrelease.Configuration
+
+    properties:
+      apiKey:
+        label: Gemini API Key
+        description: API Key for Google Gemini
+        required: true
+        password: true
+
   mcp.GeminiPrompt:
     extends: mcp.BaseTask
     description: Sends a prompt to Google Gemini and returns the response
@@ -177,4 +187,47 @@ types:
     output-properties:
       response:
         description: The response from Google Gemini
+        kind: string
+
+  #
+  # Langchain Agent
+  #
+
+  mcp.AgentPrompt:
+    extends: mcp.BaseTask
+    description: Prompts the MCP agent with a string and returns the result.
+
+    input-properties:
+      prompt:
+        description: The prompt to send to the agent
+        kind: string
+        required: true
+      model:
+        description: The Gemini model to use
+        kind: string
+        default: gemini-2.5-flash
+      apiKey:
+        label: Gemini API Key
+        description: API Key for Google Gemini
+        required: true
+        password: true
+      mcpServer1:
+        label: MCP Server 1
+        description: An MCP server that can be used by the agent
+        kind: ci
+        referenced-type: mcp.Server
+      mcpServer2:
+        label: MCP Server 2
+        description: An MCP server that can be used by the agent
+        kind: ci
+        referenced-type: mcp.Server
+      mcpServer3:
+        label: MCP Server 3
+        description: An MCP server that can be used by the agent
+        kind: ci
+        referenced-type: mcp.Server
+
+    output-properties:
+      result:
+        description: The result returned by the agent
         kind: string

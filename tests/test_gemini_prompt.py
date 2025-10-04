@@ -17,7 +17,7 @@ class TestGeminiPrompt(unittest.TestCase):
         task.input_properties = {
             'apiKey': api_key,
             'prompt': 'What is the weather in Hilversum like today?',
-            'model': 'gemini-2.5-flash'
+            'model': 'gemini-2.5-flash-lite'
         }
 
         # When

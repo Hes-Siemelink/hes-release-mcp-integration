@@ -91,6 +91,21 @@ spec:
             type: xlrelease.GateTask
             owner: admin
 
+  - template: Langchain demo
+    phases:
+      - phase: Ask
+        tasks:
+          - name: Ask about Release
+            type: mcp.AgentPrompt
+            capabilities:
+              - remote
+            prompt: Say hello in Dutch
+            apiKey: !value GEMINI_API_KEY
+            mcpServer1: Release MCP Server
+          - name: OK?
+            type: xlrelease.GateTask
+            owner: admin
+
   # Gemini prompt example
 
   - template: Gemini prompt

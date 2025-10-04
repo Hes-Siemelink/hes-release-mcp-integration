@@ -3,7 +3,7 @@ services:
   digitalai-release:
     build: digitalai-release
     ports:
-      - "5516:5516"
+      - 5516:5516
     environment:
       - ADMIN_PASSWORD=admin
       - ACCEPT_EULA=Y
@@ -31,7 +31,7 @@ services:
   container-registry:
     image: registry:2
     ports:
-      - "5050:5000"
+      - 5050:5000
     volumes:
       - .:/var/lib/registry
 
@@ -53,3 +53,9 @@ services:
       - CATALOG_ELEMENTS_LIMIT=1000
     depends_on:
       - container-registry
+
+  ticket-db:
+    build: ticket-db
+    command: [ "./spec", "mcp-backlog-server.spec.md" ]
+    ports:
+      - 8080:8080

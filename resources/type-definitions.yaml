@@ -48,10 +48,6 @@ types:
       image:
         default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
         transient: true
-      # This strong, vibrant blue conveys trust, stability, and intelligence. It's a classic "tech"
-      # color that users associate with core system functions, control, and reliability.
-      # This shade provides a clear contrast to the softer purple, helping users instantly
-      # differentiate between the creative LLM and the core MCP system.
       iconLocation: mcp.png
       taskColor: "#5F5FFF"
 
@@ -224,3 +220,9 @@ types:
       result:
         description: The result returned by the agent
         kind: string
+
+    hidden-properties:
+      server:
+        description: The MCP server
+        kind: ci
+        referenced-type: mcp.Server

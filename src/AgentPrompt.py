@@ -2,7 +2,7 @@ import asyncio
 import os
 
 from digitalai.release.integration import BaseTask
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from langchain_mcp_adapters.client import MultiServerMCPClient
@@ -32,9 +32,13 @@ class AgentPrompt(BaseTask):
         # Call agent
         output = asyncio.run(send_prompt(prompt, model['model'], mcp_servers))
         print("AgentPrompt Result:\n", output)
-        result = first_agent_message(output)
+
+        report = create_markdown_report(output)
+        print(report)
+        self.add_comment(report)
 
         # Process result
+        result = last_agent_message(output)
         self.set_output_property('result', result)
 
 
@@ -56,11 +60,23 @@ async def send_prompt(prompt, model, mcp_servers):
     return response
 
 
-def first_agent_message(output):
-    # Get content field of first object of type AIMessage
-    # Example format: {'messages': [HumanMessage(content='Say hello in Spanish', additional_kwargs={}, response_metadata={}, id='b373ad51-0d96-4dde-9fe3-c8d9828e0cc5'), AIMessage(content='Hola', additional_kwargs={}, response_metadata={'prompt_feedback': {'block_reason': 0, 'safety_ratings': []}, 'finish_reason': 'STOP', 'model_name': 'gemini-2.5-flash-lite', 'safety_ratings': []}, id='run--2f487ae6-3286-4949-8f18-3db50fd8f124-0', usage_metadata={'input_tokens': 5, 'output_tokens': 1, 'total_tokens': 6, 'input_token_details': {'cache_read': 0}})]}
+def last_agent_message(output):
+    return output['messages'][-1].content
+
+
+def create_markdown_report(output):
+    markdown = ''
     for message in output['messages']:
-        print("Message type:", type(message), "content:", getattr(message, 'content', None))
+        if isinstance(message, HumanMessage):
+            markdown += f"_{message.content}_\n\n"
         if isinstance(message, AIMessage):
-            return message.content
-    return "No response from agent"
+            if message.content:
+                markdown += f"{message.content}\n\n"
+        if isinstance(message, ToolMessage):
+            success = message.status == 'success'
+            status = "✅" if success else "❌"
+            markdown += f"```\n {status} {message.name}\n```\n\n"
+            if not success:
+                markdown += f"```\n{message.content}\n```\n\n"
+
+    return markdown

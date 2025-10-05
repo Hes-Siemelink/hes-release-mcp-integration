@@ -1,6 +1,5 @@
-Connect to: Ticket DB
-
 SQLite:
+  file: /app/tickets.db
   update:
     - |
       CREATE TABLE ticket (
@@ -17,4 +16,4 @@ SQLite:
     - CREATE INDEX idx_ticket_assignee ON ticket(assignee);
     - CREATE INDEX idx_ticket_state ON ticket(state);
 
-Print: Database created in db/sample.db
+Print: Database created

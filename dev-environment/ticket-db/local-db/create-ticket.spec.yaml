@@ -9,7 +9,6 @@ Input parameters:
     description: Assigned to
     default: unassigned
 
-Connect to: Ticket DB
 
 # Sanitize input by escaping single quotes
 Replace:
@@ -19,6 +18,7 @@ Replace:
 As: ${input}
 
 SQLite:
+  file: /app/tickets.db
   update:
     - |
       -- Insert a new ticket with sequential ID (TICKET-###) and next backlog_order

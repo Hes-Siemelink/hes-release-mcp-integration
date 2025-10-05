@@ -2,12 +2,10 @@ Input parameters:
   id:
     description: Full ticket identifier (e.g. TICKET-007)
 
-Connect to: Ticket DB
-
 Print: Getting ticket ${id}
 
 SQLite:
-  file: db/tickets.db
+  file: /app/tickets.db
   query: |
     SELECT
       *

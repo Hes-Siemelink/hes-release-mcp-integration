@@ -17,8 +17,6 @@ Input parameters:
     description: New assignee (optional)
     default: NULL
 
-Connect to: Ticket DB
-
 # Sanitize input by escaping single quotes
 Replace:
   text: "'"
@@ -27,6 +25,7 @@ Replace:
 As: ${input}
 
 SQLite:
+  file: /app/tickets.db
   update:
     - |
       -- Update ticket fields only when a non-empty value is provided.

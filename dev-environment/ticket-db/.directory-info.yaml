@@ -1,4 +1,4 @@
 connections:
   Ticket DB:
     SQLite defaults:
-      file: db/tickets.db
+      file: /app/tickets.db

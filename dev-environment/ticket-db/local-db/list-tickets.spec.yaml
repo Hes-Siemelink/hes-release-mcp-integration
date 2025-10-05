@@ -6,9 +6,8 @@ Input parameters:
     description: Optional assignee filter ('all' for no filtering)
     default: all
 
-Connect to: Ticket DB
-
 SQLite:
+  file: /app/tickets.db
   query: |
     -- List tickets with optional filtering by state and assignee.
     -- 'all' (default) or empty/null means no filtering for that field.

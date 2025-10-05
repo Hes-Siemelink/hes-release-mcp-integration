@@ -1,5 +1,3 @@
-Connect to: Ticket DB
-
 Create ticket:
   - title: Ticket pagination
     description: Add limit/offset parameters to the list-tickets endpoint so large backlogs load faster and reduce client memory usage.

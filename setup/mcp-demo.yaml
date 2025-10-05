@@ -182,7 +182,6 @@ spec:
         tasks:
           - name: Latest failed release
             type: mcp.AgentPrompt
-            server: Release MCP Server
             prompt: What is the latest failed release?
             model: Gemini 2.5 Flash
             mcpServer1: Release MCP Server

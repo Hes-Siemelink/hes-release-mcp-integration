@@ -188,8 +188,15 @@ types:
   #
 
   mcp.AgentPrompt:
-    extends: mcp.BaseTask
+    extends: xlrelease.ContainerTask
     description: Prompts the MCP agent with a string and returns the result.
+
+    hidden-properties:
+      image:
+        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
+        transient: true
+      iconLocation: agent.png
+      taskColor: "#EE9037"
 
     input-properties:
       prompt:
@@ -220,9 +227,3 @@ types:
       result:
         description: The result returned by the agent
         kind: string
-
-    hidden-properties:
-      server:
-        description: The MCP server
-        kind: ci
-        referenced-type: mcp.Server

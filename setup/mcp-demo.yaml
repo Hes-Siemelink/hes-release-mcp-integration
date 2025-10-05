@@ -188,3 +188,50 @@ spec:
           - name: OK?
             type: xlrelease.GateTask
             owner: admin
+
+  - template: Reorder tickets
+    phases:
+      - phase: Reorder backlog
+        tasks:
+          - name: Get tickets
+            type: mcp.CallTool
+            result: ${unordered}
+            server: Ticket MCP Server
+            tool: list_tickets
+          - name: Reorder by priority
+            type: mcp.AgentPrompt
+            prompt: Find the highest priority tickets and move them to the  top of the backlog
+            model: Gemini 2.5 Pro
+            mcpServer1: Ticket MCP Server
+          - name: Get tickets again
+            type: mcp.CallTool
+            result: ${ordered}
+            server: Ticket MCP Server
+            tool: list_tickets
+          - name: OK?
+            type: xlrelease.GateTask
+            description: |-
+              ## Old order
+              
+              ```
+              ${unordered}
+              ```
+              
+              ## New order
+              
+              ```
+              ${ordered}
+              ```
+    variables:
+      - type: xlrelease.StringVariable
+        key: unordered
+        requiresValue: false
+        showOnReleaseStart: false
+        label: Result
+        description: Result
+      - type: xlrelease.StringVariable
+        key: ordered
+        requiresValue: false
+        showOnReleaseStart: false
+        label: Result
+        description: Result

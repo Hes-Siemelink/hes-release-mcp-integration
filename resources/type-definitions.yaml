@@ -204,7 +204,7 @@ types:
       prompt:
         description: The prompt to send to the agent
         kind: string
-        required: true
+        size: large
       model:
         description: The LLM model to use
         kind: ci

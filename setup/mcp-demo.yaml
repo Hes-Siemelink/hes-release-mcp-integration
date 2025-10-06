@@ -180,11 +180,13 @@ spec:
     phases:
       - phase: Report
         tasks:
-          - name: Latest failed release
+          - name: Fix last failed release
             type: ai.AgentPrompt
-            prompt: What is the latest failed release?
+            prompt: |
+              Find the root cause of the last failed release and created a ticket to solve it
             model: Gemini 2.5 Flash
             mcpServer1: Release MCP Server
+            mcpServer2: Ticket MCP Server
           - name: OK?
             type: xlrelease.GateTask
             owner: admin

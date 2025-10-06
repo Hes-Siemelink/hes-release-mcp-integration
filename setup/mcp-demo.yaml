@@ -114,7 +114,7 @@ spec:
       - phase: Prompt
         tasks:
           - name: Ask something
-            type: mcp.GeminiPrompt
+            type: ai.GeminiPrompt
             model: Gemini 2.5 Flash-Lite
             prompt: Say hello in five languages
 
@@ -130,7 +130,7 @@ spec:
             server: Agility MCP Server
             tool: get_current_user
           - name: Get name
-            type: mcp.GeminiPrompt
+            type: ai.GeminiPrompt
             variableMapping:
               response: "${name}"
             model: Gemini 2.5 Flash
@@ -141,7 +141,7 @@ spec:
               ${user}
               ```
           - name: Get summary
-            type: mcp.GeminiPrompt
+            type: ai.GeminiPrompt
             variableMapping:
               response: "${summary}"
             model: Gemini 2.5 Flash
@@ -176,12 +176,12 @@ spec:
 
   # Langchain example
 
-  - template: Langchain demo
+  - template: Release Agent demo
     phases:
       - phase: Report
         tasks:
           - name: Latest failed release
-            type: mcp.AgentPrompt
+            type: ai.AgentPrompt
             prompt: What is the latest failed release?
             model: Gemini 2.5 Flash
             mcpServer1: Release MCP Server
@@ -199,7 +199,7 @@ spec:
             server: Ticket MCP Server
             tool: list_tickets
           - name: Reorder by priority
-            type: mcp.AgentPrompt
+            type: ai.AgentPrompt
             prompt: Find the highest priority tickets and move them to the  top of the backlog
             model: Gemini 2.5 Pro
             mcpServer1: Ticket MCP Server

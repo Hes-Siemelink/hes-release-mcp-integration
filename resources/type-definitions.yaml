@@ -153,8 +153,9 @@ types:
         kind: string
         default: gemini-2.5-flash
 
-  mcp.GeminiPrompt:
+  ai.GeminiPrompt:
     extends: mcp.BaseTask
+    label: "AI: Prompt (Gemini)"
     description: Sends a prompt to Google Gemini and returns the response
 
     hidden-properties:
@@ -187,9 +188,10 @@ types:
   # Langchain
   #
 
-  mcp.AgentPrompt:
+  ai.AgentPrompt:
     extends: xlrelease.ContainerTask
-    description: Prompts the MCP agent with a string and returns the result.
+    label: "AI: Agent prompt"
+    description: Prompts an AI agent to do something with the help of multiple MCP servers.
 
     hidden-properties:
       image:

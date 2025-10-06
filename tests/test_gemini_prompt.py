@@ -1,6 +1,6 @@
 import unittest
 
-from src.GeminiPrompt import GeminiPrompt
+from src.gemini_prompt import GeminiPrompt
 import os
 from dotenv import load_dotenv
 

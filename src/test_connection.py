@@ -3,7 +3,7 @@ import asyncio
 from digitalai.release.integration import BaseTask
 from fastmcp import Client
 
-from src.CallTool import create_transport
+from src.call_tool import create_transport
 
 
 class TestConnection(BaseTask):

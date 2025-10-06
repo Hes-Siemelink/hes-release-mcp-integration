@@ -3,8 +3,8 @@ import asyncio
 from digitalai.release.integration import BaseTask
 from fastmcp import Client
 
-from src.CallTool import create_transport
-from src.ListTools import list_tools
+from src.call_tool import create_transport
+from src.list_tools import list_tools
 
 
 class ToolLookupScript(BaseTask):

@@ -3,7 +3,7 @@ import unittest
 
 from dotenv import load_dotenv
 
-from src.AgentPrompt import AgentPrompt
+from src.agent_prompt import AgentPrompt
 
 
 class TestAgentPrompt(unittest.TestCase):

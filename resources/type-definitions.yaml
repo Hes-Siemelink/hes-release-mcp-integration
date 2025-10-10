@@ -136,7 +136,7 @@ types:
         referenced-type: udm.Parameters
 
   #
-  # AI Model connections
+  # AI Models
   #
 
   ai.Model:
@@ -200,7 +200,7 @@ types:
   # Prompts
   #
 
-  ai.AiPrompt:
+  ai.LlmPrompt:
     extends: xlrelease.ContainerTask
     label: "AI: Prompt"
     description: Sends a prompt to an LLM service
@@ -225,33 +225,6 @@ types:
     output-properties:
       response:
         description: The AI response
-        kind: string
-
-  ai.GeminiPrompt:
-    extends: xlrelease.ContainerTask
-    label: "AI: Prompt (Gemini)"
-    description: Sends a prompt to Google Gemini and returns the response
-
-    hidden-properties:
-      image:
-        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
-        transient: true
-      iconLocation: gemini.png
-      taskColor: "#C88BFF"
-
-    input-properties:
-      model:
-        description: The LLM model to use
-        kind: ci
-        referenced-type: ai.GeminiModel
-      prompt:
-        description: The prompt to send to Google Gemini
-        kind: string
-        size: large
-
-    output-properties:
-      response:
-        description: The response from Google Gemini
         kind: string
 
   #

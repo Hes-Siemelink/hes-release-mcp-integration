@@ -2,7 +2,7 @@
 apiVersion: xl-release/v1
 kind: Templates
 metadata:
-  home: MCP Demo
+  home: AI Demo
 spec:
 
   # MCP Servers
@@ -43,6 +43,12 @@ spec:
     url: https://api.staging.digital.ai/llm
     apiKey: !value DAI_LLM_API_KEY
     model_id: amazon.nova-micro-v1:0
+
+  - name: Anthropic Sonnet 4.5
+    type: ai.OpenAiModel
+    url: https://api.staging.digital.ai/llm
+    apiKey: !value DAI_LLM_API_KEY
+    model_id: anthropic.claude-sonnet-4-5-20250929-v1:0
 
   # Demo Templates
   - template: MCP Ticket Sample
@@ -119,18 +125,21 @@ spec:
     phases:
       - phase: Prompt
         tasks:
-          - name: Ask something
-            type: ai.GeminiPrompt
+          - name: Say hello (Gemini)
+            type: ai.LlmPrompt
+            prompt: Say hello in six languages, one for each continent
             model: Gemini 2.5 Flash-Lite
-            prompt: Say hello in five languages
-          - name: Ask something (Gemini)
-            type: ai.AiPrompt
-            prompt: Say hello in five languages
-            model: Gemini 2.5 Flash-Lite
-          - name: Ask something (Amazon Nova)
-            type: ai.AiPrompt
-            prompt: Say hello in five languages
+          - name: Say hello (Amazon Nova)
+            type: ai.LlmPrompt
+            prompt: Say hello in six languages, one for each continent
             model: Amazon Nova Micro 1:0
+          - name: Say hello (Anthropic)
+            type: ai.LlmPrompt
+            prompt: Say hello in six languages, one for each continent
+            model: Anthropic Sonnet 4.5
+          - name: OK?
+            type: xlrelease.GateTask
+            owner: admin
 
   # Full example
   - template: Agility summarize user
@@ -144,7 +153,7 @@ spec:
             server: Agility MCP Server
             tool: get_current_user
           - name: Get name
-            type: ai.GeminiPrompt
+            type: ai.LlmPrompt
             variableMapping:
               response: "${name}"
             model: Gemini 2.5 Flash
@@ -155,7 +164,7 @@ spec:
               ${user}
               ```
           - name: Get summary
-            type: ai.GeminiPrompt
+            type: ai.LlmPrompt
             variableMapping:
               response: "${summary}"
             model: Gemini 2.5 Flash

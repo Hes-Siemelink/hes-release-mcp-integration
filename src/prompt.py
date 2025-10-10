@@ -3,7 +3,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 
 
-class AiPrompt(BaseTask):
+class LlmPrompt(BaseTask):
 
     def execute(self) -> None:
         # Get input

@@ -1,11 +1,11 @@
 import unittest
 
-from src.prompt import Prompt
+from src.prompt import LlmPrompt
 import os
 from dotenv import load_dotenv
 
 
-class TestPrompt(unittest.TestCase):
+class TestLlmPrompt(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -13,7 +13,7 @@ class TestPrompt(unittest.TestCase):
 
     def test_prompt_in_gemini(self):
         # Given
-        task = Prompt()
+        task = LlmPrompt()
         task.input_properties = {
             'prompt': 'Say hello in Spanish',
             'model': {
@@ -34,7 +34,7 @@ class TestPrompt(unittest.TestCase):
 
     def test_prompt_in_digitalai(self):
         # Given
-        task = Prompt()
+        task = LlmPrompt()
         task.input_properties = {
             'prompt': 'Say hello in Spanish',
             'model': {

@@ -22,21 +22,27 @@ spec:
     type: mcp.Server
     url: http://host.docker.internal:8000/mcp
 
-    # Gemini Models
+    # AI Models
   - name: Gemini 2.5 Pro
-    type: mcp.GeminiModel
+    type: ai.GeminiModel
     apiKey: !value GEMINI_API_KEY
-    model: gemini-2.5-pro
+    model_id: gemini-2.5-pro
 
   - name: Gemini 2.5 Flash
-    type: mcp.GeminiModel
+    type: ai.GeminiModel
     apiKey: !value GEMINI_API_KEY
-    model: gemini-2.5-flash
+    model_id: gemini-2.5-flash
 
   - name: Gemini 2.5 Flash-Lite
-    type: mcp.GeminiModel
+    type: ai.GeminiModel
     apiKey: !value GEMINI_API_KEY
-    model: gemini-2.5-flash-lite
+    model_id: gemini-2.5-flash-lite
+
+  - name: Amazon Nova Micro 1:0
+    type: ai.OpenAiModel
+    url: https://api.staging.digital.ai/llm
+    apiKey: !value DAI_LLM_API_KEY
+    model_id: amazon.nova-micro-v1:0
 
   # Demo Templates
   - template: MCP Ticket Sample

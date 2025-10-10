@@ -139,8 +139,27 @@ types:
   # Google Gemini
   #
 
-  mcp.GeminiModel:
+  ai.Model:
     extends: xlrelease.Configuration
+    virtual: true
+
+    properties:
+      apiKey:
+        label: API Key
+        description: API Key for the LLM provider
+        required: true
+        password: true
+      model_id:
+        label: Model
+        description: The model to use
+        kind: string
+
+  ai.GeminiModel:
+    extends: ai.Model
+
+    hidden-properties:
+      provider:
+        default: gemini
 
     properties:
       apiKey:
@@ -148,10 +167,34 @@ types:
         description: API Key for Google Gemini
         required: true
         password: true
-      model:
+      model_id:
+        label: Model
         description: The model to use
         kind: string
         default: gemini-2.5-flash
+
+  ai.OpenAiModel:
+    extends: ai.Model
+
+    hidden-properties:
+      provider:
+        default: openai
+
+    properties:
+      url:
+        label: API URL
+        description: The URL to each the OpenAI API
+        kind: string
+        default: https://api.openai.com/v1/chat/completions
+      apiKey:
+        label: API Key
+        description: API Key for the LLM provider
+        required: true
+        password: true
+      model_id:
+        label: Model
+        description: The model to use
+        kind: string
 
   ai.GeminiPrompt:
     extends: mcp.BaseTask
@@ -173,7 +216,7 @@ types:
       model:
         description: The LLM model to use
         kind: ci
-        referenced-type: mcp.GeminiModel
+        referenced-type: ai.GeminiModel
       prompt:
         description: The prompt to send to Google Gemini
         kind: string
@@ -208,7 +251,7 @@ types:
       model:
         description: The LLM model to use
         kind: ci
-        referenced-type: mcp.GeminiModel
+        referenced-type: ai.Model
       mcpServer1:
         label: MCP Server 1
         description: An MCP server that can be used by the agent

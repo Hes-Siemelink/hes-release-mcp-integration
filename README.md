@@ -2,9 +2,9 @@
 
 AI demo tasks for Release
 
-* MCP: List tools
-* MCP: Call tools
-* Gemini prompt
+* **MCP**: Connect to any MCP server and invoke its tools
+* **AI prompt**: Connect to an AI server and invoke a prompt. Support Gemini and OpenAI-compatible providers
+* **Agent prompt**. Combines the MCP and AI prompt tasks to create an agent that can use tools
 
 ## Prerequisites
 
@@ -46,6 +46,18 @@ sh build.sh --upload
 build.bat --upload
 ```
 
+### 3. Set up credentials
+
+Put your API keys into [setup/secrets.xlvals](setup/secrets.xlvals).
+
+Use the example file as a base:
+
+```commandline
+cp setup/secrets.xlvals.example setup/secrets.xlvals
+```
+
+Then edit the file and add your keys.
+
 ### 4. Upload demo templates
 
 Run the following command to upload the demo templates to the local Release instance:
@@ -54,12 +66,11 @@ Run the following command to upload the demo templates to the local Release inst
 ./xlw apply -f setup/mcp-demo.yaml
 ```
 
-### Browse the templates
+### Demo time!
 
 1. Log in to http://localhost:5516 with admin/admin
-2. Go to the **MCP Demo** folder
-3. Go the **Templates** section and look at the examples
+2. Go to the **AI Demo** folder
+3. Go the **Templates** section and run the examples
 
-Now add your favorite MCP Server under Connections and build your own template using the MCP plugin!
-
+👉Add your favorite MCP Server or LLM provider under Connections and build your own example!
 

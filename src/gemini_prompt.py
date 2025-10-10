@@ -18,7 +18,7 @@ class GeminiPrompt(BaseTask):
         client = genai.Client(api_key=api_key)
 
         response = client.models.generate_content(
-            model=model['model'], contents=prompt
+            model=model['model_id'], contents=prompt
         )
         self.add_comment(response.text)
 

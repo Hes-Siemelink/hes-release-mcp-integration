@@ -1,0 +1,56 @@
+import unittest
+
+from src.prompt import Prompt
+import os
+from dotenv import load_dotenv
+
+
+class TestPrompt(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # run load_denv() once for the entire test class
+        load_dotenv()
+
+    def test_prompt_in_gemini(self):
+        # Given
+        task = Prompt()
+        task.input_properties = {
+            'prompt': 'Say hello in Spanish',
+            'model': {
+                'provider': 'gemini',
+                'apiKey': os.getenv('GEMINI_API_KEY'),
+                'model_id': 'gemini-2.5-flash-lite'
+            },
+        }
+
+        # When
+        task.execute_task()
+
+        result = task.get_output_properties()['response']
+        print(result)
+
+        # Then
+        self.assertIn('Hola', result)
+
+    def test_prompt_in_digitalai(self):
+        # Given
+        task = Prompt()
+        task.input_properties = {
+            'prompt': 'Say hello in Spanish',
+            'model': {
+                'provider': 'openai',
+                'url': 'https://api.staging.digital.ai/llm',
+                'apiKey': os.getenv('DAI_LLM_API_KEY'),
+                'model_id': 'amazon.nova-micro-v1:0'
+            },
+        }
+
+        # When
+        task.execute_task()
+
+        result = task.get_output_properties()['response']
+        print(result)
+
+        # Then
+        self.assertIn('Hola', result)

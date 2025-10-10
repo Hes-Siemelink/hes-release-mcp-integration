@@ -34,7 +34,6 @@ class TestAgentPrompt(unittest.TestCase):
     def test_agent_prompt_with_digital_ai(self):
         # Given
         load_dotenv()
-        api_key = os.getenv('DAI_LLM_API_KEY')
 
         task = AgentPrompt()
         task.input_properties = {
@@ -42,7 +41,7 @@ class TestAgentPrompt(unittest.TestCase):
             'model': {
                 'provider': 'openai',
                 'url': 'https://api.staging.digital.ai/llm',
-                'apiKey': api_key,
+                'apiKey': os.getenv('DAI_LLM_API_KEY'),
                 'model_id': 'amazon.nova-micro-v1:0'
             },
         }

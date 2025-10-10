@@ -136,7 +136,7 @@ types:
         referenced-type: udm.Parameters
 
   #
-  # Google Gemini
+  # AI Model connections
   #
 
   ai.Model:
@@ -196,8 +196,39 @@ types:
         description: The model to use
         kind: string
 
+  #
+  # Prompts
+  #
+
+  ai.AiPrompt:
+    extends: xlrelease.ContainerTask
+    label: "AI: Prompt"
+    description: Sends a prompt to an LLM service
+
+    hidden-properties:
+      image:
+        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
+        transient: true
+      iconLocation: gemini.png
+      taskColor: "#C88BFF"
+
+    input-properties:
+      prompt:
+        description: The prompt to be answered by the AI model
+        kind: string
+        size: large
+      model:
+        description: The LLM model to use
+        kind: ci
+        referenced-type: ai.Model
+
+    output-properties:
+      response:
+        description: The AI response
+        kind: string
+
   ai.GeminiPrompt:
-    extends: mcp.BaseTask
+    extends: xlrelease.ContainerTask
     label: "AI: Prompt (Gemini)"
     description: Sends a prompt to Google Gemini and returns the response
 
@@ -207,10 +238,6 @@ types:
         transient: true
       iconLocation: gemini.png
       taskColor: "#C88BFF"
-      server:
-        description: The MCP server
-        kind: ci
-        referenced-type: mcp.Server
 
     input-properties:
       model:

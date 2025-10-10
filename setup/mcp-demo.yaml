@@ -113,9 +113,9 @@ spec:
             type: xlrelease.GateTask
             owner: admin
 
-  # Gemini prompt example
+  # Prompt examples
 
-  - template: Gemini prompt
+  - template: Prompt example
     phases:
       - phase: Prompt
         tasks:
@@ -123,6 +123,14 @@ spec:
             type: ai.GeminiPrompt
             model: Gemini 2.5 Flash-Lite
             prompt: Say hello in five languages
+          - name: Ask something (Gemini)
+            type: ai.AiPrompt
+            prompt: Say hello in five languages
+            model: Gemini 2.5 Flash-Lite
+          - name: Ask something (Amazon Nova)
+            type: ai.AiPrompt
+            prompt: Say hello in five languages
+            model: Amazon Nova Micro 1:0
 
   # Full example
   - template: Agility summarize user

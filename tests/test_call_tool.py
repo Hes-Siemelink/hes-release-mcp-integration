@@ -48,7 +48,3 @@ class TestCallTool(unittest.TestCase):
         # Then
         # Check if result contains 'TICKET'
         self.assertIn('TICKET', result)
-
-
-if __name__ == '__main__':
-    unittest.main()

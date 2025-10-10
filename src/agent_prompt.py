@@ -1,5 +1,4 @@
 import asyncio
-import os
 
 from digitalai.release.integration import BaseTask
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
@@ -16,7 +15,6 @@ class AgentPrompt(BaseTask):
         # Get input
         prompt = self.input_properties.get('prompt')
         model = self.input_properties['model']
-        os.environ["GOOGLE_API_KEY"] = model['apiKey']
         mcp_servers = {}
         for server in [self.input_properties.get('mcpServer1'), self.input_properties.get('mcpServer2'),
                        self.input_properties.get('mcpServer3')]:
@@ -57,9 +55,10 @@ async def send_prompt(prompt, model, mcp_servers):
 
 def create_model(model):
     provider = model['provider']
-    
+
     if provider == 'gemini':
         return ChatGoogleGenerativeAI(
+            google_api_key=model['apiKey'],
             model=model['model_id'],
             temperature=0,
             max_tokens=None,
@@ -69,10 +68,10 @@ def create_model(model):
     if provider == 'openai':
         return ChatOpenAI(
             base_url=model['url'],
-            default_headers={'Authorization': f'Token {model["apiKey"]}'},
+            api_key=model["apiKey"],
             model=model['model_id'],
-            temperature=0.0,
-            api_key=model["apiKey"]
+            default_headers={'Authorization': f'Token {model["apiKey"]}'},
+            temperature=0.0
         )
     raise ValueError(f"Provider {provider} is not supported")
 

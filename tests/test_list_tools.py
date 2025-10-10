@@ -27,7 +27,3 @@ class TestListTools(unittest.TestCase):
         inputSchema = task.get_output_properties()['inputSchema']
         print(inputSchema)
         self.assertIn('list_tickets', inputSchema)
-
-
-if __name__ == '__main__':
-    unittest.main()

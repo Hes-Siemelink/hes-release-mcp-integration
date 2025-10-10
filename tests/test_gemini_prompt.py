@@ -18,7 +18,7 @@ class TestGeminiPrompt(unittest.TestCase):
             'prompt': 'Say hello in Spanish',
             'model': {
                 'apiKey': api_key,
-                'model': 'gemini-2.5-flash-lite'
+                'model_id': 'gemini-2.5-flash-lite'
             },
         }
 
@@ -30,7 +30,3 @@ class TestGeminiPrompt(unittest.TestCase):
 
         # Then
         self.assertIn('Hola', result)
-
-
-if __name__ == '__main__':
-    unittest.main()

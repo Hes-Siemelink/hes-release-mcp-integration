@@ -76,3 +76,31 @@ class TestAgentPrompt(unittest.TestCase):
 
         # Then
         # self.assertIn('Hola', result)
+
+    def test_ticket_reorder_mcp(self):
+        # Given
+        task = AgentPrompt()
+        task.input_properties = {
+            'prompt': """Write a Python script that will find the highest priority tickets and move 
+              them to the top of the backlog. Assume that the script can call an MCP tool with 
+              the the function call mcp_tool_call(server, tool, input) """,
+            'model': {
+                'provider': 'openai',
+                'url': 'https://api.staging.digital.ai/llm',
+                'apiKey': os.getenv('DAI_LLM_API_KEY'),
+                'model_id': 'amazon.nova-micro-v1:0'
+                # 'model_id': 'anthropic.claude-sonnet-4-20250514-v1:0'
+            },
+            'mcpServer1': {
+                'title': 'Ticket MCP',
+                'url': 'http://host.docker.internal:8080',
+                'transport': 'sse',
+            }
+        }
+
+        # When
+        task.execute_task()
+        result = task.get_output_properties()['result']
+        print(result)
+
+        # Then

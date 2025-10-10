@@ -34,7 +34,6 @@ class AgentPrompt(BaseTask):
         print("AgentPrompt Result:\n", output)
 
         report = create_markdown_report(output)
-        print(report)
         self.add_comment(report)
 
         # Process result

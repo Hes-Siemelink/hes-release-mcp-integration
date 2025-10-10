@@ -1,24 +1,23 @@
 import os
 import unittest
-
 from dotenv import load_dotenv
-
 from src.agent_prompt import AgentPrompt
 
 
 class TestAgentPrompt(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        load_dotenv()
+
     def test_agent_prompt_echo(self):
         # Given
-        load_dotenv()
-        api_key = os.getenv('GEMINI_API_KEY')
-
         task = AgentPrompt()
         task.input_properties = {
             'prompt': 'Say hello in Spanish',
             'model': {
                 'provider': 'gemini',
-                'apiKey': api_key,
+                'apiKey': os.getenv('GEMINI_API_KEY'),
                 'model_id': 'gemini-2.5-flash-lite'
             },
         }
@@ -33,8 +32,6 @@ class TestAgentPrompt(unittest.TestCase):
 
     def test_agent_prompt_with_digital_ai(self):
         # Given
-        load_dotenv()
-
         task = AgentPrompt()
         task.input_properties = {
             'prompt': 'Say hello in Spanish',
@@ -57,15 +54,12 @@ class TestAgentPrompt(unittest.TestCase):
     @unittest.skip("Release token expired")
     def test_with_release_mcp(self):
         # Given
-        load_dotenv()
-        api_key = os.getenv('GEMINI_API_KEY')
-
         task = AgentPrompt()
         task.input_properties = {
             'prompt': 'What is the latest failed release',
             'model': {
                 'provider': 'gemini',
-                'apiKey': api_key,
+                'apiKey': os.getenv('GEMINI_API_KEY'),
                 'model_id': 'gemini-2.5-flash'
             },
             'mcpServer1': {

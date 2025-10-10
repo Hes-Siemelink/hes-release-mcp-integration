@@ -9,7 +9,6 @@ class TestPrompt(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # run load_denv() once for the entire test class
         load_dotenv()
 
     def test_prompt_in_gemini(self):

@@ -1,8 +1,15 @@
 from time import sleep
+from typing import Dict
 
 from digitalai.release.integration import BaseTask
+from langchain_core.chat_history import InMemoryChatMessageHistory
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableWithMessageHistory
 
 from src.llm_prompt import create_model
+
+# In-memory session store
+_session_store: Dict[str, InMemoryChatMessageHistory] = {}
 
 
 class LlmChat(BaseTask):
@@ -10,16 +17,23 @@ class LlmChat(BaseTask):
     def execute(self) -> None:
         # Get input
         prompt = self.input_properties.get('prompt')
-        model = self.input_properties['model']
-        model_connector = create_model(model)
+        model_spec = self.input_properties['model']
+        model = create_model(model_spec)
 
-        answer_count = 0
+        # Setup chat with memory
+        chat = create_chat_session(model)
+        session_id = str(self.task_id)  # use task id as session identifier
 
         # Chat loop
+        answer_count = 0
+        output = None
         while (prompt or "").strip().lower() != "stop chat":
             # Ask agent
             self.set_status_line("AI is thinking")
-            output = model_connector.invoke(prompt)
+            output = chat.invoke(
+                {"input": prompt},
+                config={"configurable": {"session_id": session_id}},
+            )
 
             # Set the output to the last response
             self.set_output_property('response', output.content)
@@ -42,7 +56,7 @@ class LlmChat(BaseTask):
         # Summarize last answer in status line
         if output:
             self.set_status_line("Summarizing")
-            summary = model_connector.invoke(f"""
+            summary = model.invoke(f"""
             Summarize the following answer in maximum 5 words. <answer>{output.content}</answer>""")
             self.set_status_line(summary.content)
         else:
@@ -83,3 +97,27 @@ def find_last_index_containing(comments: list[str], marker: str) -> int:
         if marker in comments[i]:
             return i
     return -1
+
+
+#
+# Chat history
+#
+
+def get_session_history(session_id: str) -> InMemoryChatMessageHistory:
+    return _session_store.setdefault(session_id, InMemoryChatMessageHistory())
+
+
+def create_chat_session(model):
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are a helpful assistant."),
+        ("placeholder", "{history}"),
+        ("human", "{input}"),
+    ])
+    chain = prompt | model
+    return RunnableWithMessageHistory(
+        runnable=chain,
+        get_session_history=get_session_history,
+        history_messages_key="history",
+        input_messages_key="input",
+        # output_messages_key="answer",
+    )

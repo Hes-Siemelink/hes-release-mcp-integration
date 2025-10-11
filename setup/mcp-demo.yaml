@@ -260,3 +260,18 @@ spec:
         showOnReleaseStart: false
         label: Result
         description: Result
+
+
+  - template: Chat example
+    phases:
+      - phase: Prompt
+        tasks:
+          - name: Chat with agent
+            type: ai.LlmChat
+            prompt: "Say hello in six languages, one for each continent"
+            model: Amazon Nova Micro 1:0
+          - name: OK?
+            type: xlrelease.GateTask
+            owner: admin
+    scriptUsername: admin
+    scriptUserPassword: admin

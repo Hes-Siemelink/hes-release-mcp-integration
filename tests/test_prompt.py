@@ -1,6 +1,6 @@
 import unittest
 
-from src.prompt import LlmPrompt
+from src.llm_prompt import LlmPrompt
 import os
 from dotenv import load_dotenv
 

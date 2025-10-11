@@ -2,11 +2,11 @@ import asyncio
 
 from digitalai.release.integration import BaseTask
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
-from langchain_google_genai import ChatGoogleGenerativeAI
 
 from langchain_mcp_adapters.client import MultiServerMCPClient
-from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
+
+from src.llm_prompt import create_model
 
 
 class AgentPrompt(BaseTask):
@@ -50,29 +50,6 @@ async def send_prompt(prompt, model, mcp_servers):
     response = await agent.ainvoke({"messages": prompt})
 
     return response
-
-
-def create_model(model):
-    provider = model['provider']
-
-    if provider == 'gemini':
-        return ChatGoogleGenerativeAI(
-            google_api_key=model['apiKey'],
-            model=model['model_id'],
-            temperature=0,
-            max_tokens=None,
-            timeout=None,
-            max_retries=2,
-        )
-    if provider == 'openai':
-        return ChatOpenAI(
-            base_url=model['url'],
-            api_key=model["apiKey"],
-            model=model['model_id'],
-            default_headers={'Authorization': f'Token {model["apiKey"]}'},
-            temperature=0.0
-        )
-    raise ValueError(f"Provider {provider} is not supported")
 
 
 def last_agent_message(output):

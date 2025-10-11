@@ -38,15 +38,18 @@ class LlmChat(BaseTask):
             # Set the output to the last response
             self.set_output_property('response', output.content)
 
+            # Send response to the task UI
+            comment = f"_{prompt}_\n\n"
+            comment += output.content
+
             # Insert marker so we can locate this response in the comments later
             answer_count += 1
             answer_marker = f"<!--- Answer {answer_count} --->"
-            comment = output.content + "\n" + answer_marker
+            comment += "\n" + answer_marker
 
             # Add instructions to stop the chat
             comment += "\n\n_Type `stop chat` to end the conversation._"
 
-            # Show response in comments
             self.add_comment(comment)
 
             # Wait for next prompt

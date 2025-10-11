@@ -15,13 +15,15 @@ class LlmPrompt(BaseTask):
         self.set_status_line("AI is thinking")
         model_connector = create_model(model)
         output = model_connector.invoke(prompt)
-        print("AgentPrompt Result:\n", output)
-
         response = output.content
-        self.add_comment(response)
+
+        # Send comment to the task UI
+        comment = f"_{prompt}_\n\n"
+        comment += response
+        self.add_comment(comment)
         self.set_status_line("")
 
-        # Process result
+        # Set output
         self.set_output_property('response', response)
 
 

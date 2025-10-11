@@ -16,28 +16,37 @@ class LlmChat(BaseTask):
         answer_count = 0
 
         # Chat loop
-        response = ""
         while (prompt or "").strip().lower() != "stop chat":
             # Ask agent
             self.set_status_line("AI is thinking")
             output = model_connector.invoke(prompt)
 
+            # Set the output to the last response
+            self.set_output_property('response', output.content)
+
             # Insert marker so we can locate this response in the comments later
             answer_count += 1
             answer_marker = f"<!--- Answer {answer_count} --->"
-            response = output.content + "\n" + answer_marker
+            comment = output.content + "\n" + answer_marker
 
-            response += output.content + "\n\n_Type `stop chat` to end the conversation._"
+            # Add instructions to stop the chat
+            comment += "\n\n_Type `stop chat` to end the conversation._"
 
             # Show response in comments
-            self.add_comment(response)
+            self.add_comment(comment)
 
             # Wait for next prompt
             self.set_status_line("💬Waiting for next prompt...")
             prompt = self.wait_for_next_prompt(answer_marker)
 
-        # Process result
-        self.set_output_property('response', response)
+        # Summarize last answer in status line
+        if output:
+            self.set_status_line("Summarizing")
+            summary = model_connector.invoke(f"""
+            Summarize the following answer in maximum 5 words. <answer>{output.content}</answer>""")
+            self.set_status_line(summary.content)
+        else:
+            self.set_status_line("")
 
     def wait_for_next_prompt(self, marker):
 

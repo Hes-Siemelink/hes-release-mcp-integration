@@ -200,10 +200,8 @@ types:
   # Prompts
   #
 
-  ai.LlmPrompt:
+  ai.BasePrompt:
     extends: xlrelease.ContainerTask
-    label: "AI: Prompt"
-    description: Sends a prompt to an LLM service
 
     hidden-properties:
       image:
@@ -211,6 +209,31 @@ types:
         transient: true
       iconLocation: gemini.png
       taskColor: "#C88BFF"
+
+  ai.LlmPrompt:
+    extends: ai.BasePrompt
+    label: "AI: Prompt"
+    description: Sends a prompt to an LLM service
+
+    input-properties:
+      prompt:
+        description: The prompt to be answered by the AI model
+        kind: string
+        size: large
+      model:
+        description: The LLM model to use
+        kind: ci
+        referenced-type: ai.Model
+
+    output-properties:
+      response:
+        description: The AI response
+        kind: string
+
+  ai.LlmChat:
+    extends: ai.BasePrompt
+    label: "AI: Chat"
+    description: Chats with the LLM. Send 'Stop chat' to end the chat.
 
     input-properties:
       prompt:

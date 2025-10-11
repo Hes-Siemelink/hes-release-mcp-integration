@@ -12,12 +12,14 @@ class LlmPrompt(BaseTask):
         model = self.input_properties['model']
 
         # Call agent
+        self.set_status_line("AI is thinking")
         model_connector = create_model(model)
         output = model_connector.invoke(prompt)
         print("AgentPrompt Result:\n", output)
 
         response = output.content
         self.add_comment(response)
+        self.set_status_line("")
 
         # Process result
         self.set_output_property('response', response)

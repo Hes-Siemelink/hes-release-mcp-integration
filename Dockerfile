@@ -11,11 +11,14 @@ RUN mkdir /app && chmod -R 777 /app
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the source code into the container
-COPY . .
+# Copy requirements.txt first to leverage Docker cache
+COPY requirements.txt ./
 
-# Install dependencies
+# Install dependencies. This layer will be cached unless requirements.txt changes
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the source code
+COPY . .
 
 # Set the entrypoint command
 CMD ["python", "-m", "digitalai.release.integration.wrapper"]
